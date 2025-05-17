@@ -86,11 +86,11 @@ const HeroSection: React.FC = () => {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-8 leading-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+            <span className="ml-3 font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-400">
               Protect Your Digital Identity
             </span>
             <br />
-            <span className="text-white">From Data Breaches</span>
+            <span className="ml-3 font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-400">From Data Breaches</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto">
@@ -101,6 +101,7 @@ const HeroSection: React.FC = () => {
             <Button 
               size="lg" 
               variant="primary"
+              className="flex items-center justify-center bg-gradient-to-r from-green-600 to-green-800 hover:from-green-500 hover:to-green-700 border border-green-400/30 text-white rounded-md px-4 py-2"
               rightIcon={<ArrowRight className="w-5 h-5" />}
               onClick={() => {
                 document.querySelector('#search')?.scrollIntoView({ behavior: 'smooth' });
@@ -108,25 +109,8 @@ const HeroSection: React.FC = () => {
             >
               Check for Breaches
             </Button>
-            
-            <Button 
-              size="lg" 
-              variant="secondary"
-            >
-              Learn More
-            </Button>
           </div>
-          
-          <div className="mt-16 text-center">
-            <p className="text-gray-400 mb-4">Trusted by security professionals worldwide</p>
-            <div className="flex flex-wrap justify-center gap-8 opacity-70">
-              {/* Placeholder for company logos */}
-              <div className="h-8 w-24 bg-gray-800 rounded animate-pulse"></div>
-              <div className="h-8 w-28 bg-gray-800 rounded animate-pulse"></div>
-              <div className="h-8 w-20 bg-gray-800 rounded animate-pulse"></div>
-              <div className="h-8 w-32 bg-gray-800 rounded animate-pulse"></div>
-            </div>
-          </div>
+        
         </div>
       </div>
     </div>
