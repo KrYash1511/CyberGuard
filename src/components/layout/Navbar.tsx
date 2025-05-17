@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-gray-900/95 backdrop-blur-sm shadow-lg"
+          ? "bg-gray-900/85 backdrop-blur-sm shadow-lg"
           : "bg-transparent"
       }`}
     >
@@ -45,8 +45,8 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Shield className="h-8 w-8 text-cyan-400" />
-            <span className="ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+            <Shield className="h-8 w-8 text-green-400" />
+            <span className="ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-400">
               CyberGuard
             </span>
           </div>
@@ -56,29 +56,29 @@ const Navbar: React.FC = () => {
             <div className="ml-10 flex items-center space-x-4">
               <Link
                 href="/home"
-                activeClass="text-cyan-400"
-                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+                activeClass="text-green-100"
+                className="px-3 py-2 text-sm font-medium hover:text-green-400 transition-colors"
               >
                 Home
               </Link>
               <Link
                 href="#features"
-                activeClass="text-cyan-400"
-                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+                activeClass="text-green-100"
+                className="px-3 py-2 text-sm font-medium hover:text-green-400 transition-colors"
               >
                 Features
               </Link>
               <Link
                 href="#search"
-                activeClass="text-cyan-400"
-                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+                activeClass="text-green-100"
+                className="px-3 py-2 text-sm font-medium hover:text-green-400 transition-colors"
               >
                 Check Breach
               </Link>
               <Link
                 href="#faq"
-                activeClass="text-cyan-400"
-                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+                activeClass="text-green-100"
+                className="px-3 py-2 text-sm font-medium hover:text-green-400 transition-colors"
               >
                 FAQ
               </Link>
@@ -90,28 +90,28 @@ const Navbar: React.FC = () => {
             <div className="hidden md:flex items-center space-x-4">
               <div className="relative group">
                 <button className="flex items-center space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-cyan-500 flex items-center justify-center text-white font-medium">
+                  <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center text-white font-medium">
                     {user.initial}
                   </div>
                   <span className="text-white">{user.name}</span>
                 </button>
-                <div className="absolute right-0 w-48 mt-2 origin-top-right bg-gray-800 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                <div className="absolute right-0 w-48 mt-2 origin-top-right bg-gray-600 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                   <div className="py-1">
                     <Link
                       href="/profile"
-                      className="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-cyan-400"
+                      className="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-green-400"
                     >
                       Your Profile
                     </Link>
                     <Link
                       href="/settings"
-                      className="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-cyan-400"
+                      className="block px-4 py-2 text-sm hover:bg-green-700 hover:text-green-400"
                     >
                       Settings
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700 hover:text-cyan-400"
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700 hover:text-green-400"
                     >
                       Sign Out
                     </button>
@@ -122,7 +122,7 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="hidden md:flex items-center space-x-4">
               <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
-                Log In
+                Log Out
               </Button>
             </div>
           )}
@@ -219,7 +219,7 @@ const Navbar: React.FC = () => {
                   navigate("/");
                 }}
               >
-                Log In
+                Log Out
               </Button>
             </div>
           )}
