@@ -113,7 +113,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
               className="text-center bg-gray-800/40 backdrop-blur-sm rounded-lg p-6 border border-gray-700 transform transition-transform hover:scale-105"
             >
               <h3 className="text-3xl sm:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
-                <span className="counter-value">{stat.value}</span>
+                <span className="ml-3 font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-400">{stat.value}</span>
               </h3>
               <p className="text-gray-400">{stat.label}</p>
             </div>

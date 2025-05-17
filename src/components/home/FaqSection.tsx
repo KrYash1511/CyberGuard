@@ -26,7 +26,7 @@ const FaqSection: React.FC<FaqSectionProps> = ({ faqs }) => {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+              <span className="ml-3 font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-400">
                 Frequently Asked Questions
               </span>
             </h2>
