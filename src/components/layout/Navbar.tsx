@@ -1,193 +1,231 @@
-import React, { useEffect, useState } from "react";
-import {
-  Shield,
-  Bell,
-  User,
-  Home,
-  List,
-  AlertCircle,
-  HelpCircle,
-  LogOut,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Menu, X, Shield } from "lucide-react";
+import { Link } from "../ui/Link";
 import { Button } from "../ui/Button";
 import { useNavigate } from "react-router-dom";
-import authService from "../../services/authService";
 
 const Navbar: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<{ name: string; initial: string } | null>(
+    null
+  );
   const navigate = useNavigate();
-  const [showSubscribe, setShowSubscribe] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
-  // Listen to auth changes
   useEffect(() => {
-    const unsubscribe = authService.onAuthChange((user) => {
-      setCurrentUser(user);
-    });
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
 
-    return () => unsubscribe();
+    // Check for logged in user
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSubscribed(true);
-      setShowSubscribe(false);
-      setEmail("");
-    }, 1500);
-  };
-
-  const handleLogout = async () => {
-    await authService.logout();
-    navigate("/login");
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/");
   };
 
   return (
-    <nav className="bg-gray-900 border-b border-green-400/20 px-4 sm:px-6 lg:px-8 z-50 relative">
-      <div className="flex items-center justify-between h-16">
-        {/* Logo and main nav */}
-        <div className="flex items-center space-x-8">
-          <div
-            className="flex items-center cursor-pointer group"
-            onClick={() => navigate("/")}
-          >
-            <Shield className="h-6 w-6 text-green-400 group-hover:text-green-300 transition-colors" />
-            <span className="ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-400 group-hover:from-green-300 group-hover:to-cyan-300 transition-colors">
-              Cyber<span className="font-mono">Guard</span>
+    <nav
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-gray-900/95 backdrop-blur-sm shadow-lg"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0 flex items-center">
+            <Shield className="h-8 w-8 text-cyan-400" />
+            <span className="ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+              CyberGuard
             </span>
           </div>
 
-          <div className="hidden md:flex space-x-6">
-            <NavItem
-              icon={<Home className="h-5 w-5" />}
-              text="Home"
-              onClick={() => navigate("/")}
-            />
-            <NavItem
-              icon={<List className="h-5 w-5" />}
-              text="Features"
-              onClick={() => navigate("/features")}
-            />
-            <NavItem
-              icon={<AlertCircle className="h-5 w-5" />}
-              text="Check Breach"
-              onClick={() => navigate("/breach-check")}
-            />
-            <NavItem
-              icon={<HelpCircle className="h-5 w-5" />}
-              text="FAQ"
-              onClick={() => navigate("/faq")}
-            />
+          {/* Desktop Nav */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-center space-x-4">
+              <Link
+                href="/home"
+                activeClass="text-cyan-400"
+                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href="#features"
+                activeClass="text-cyan-400"
+                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+              >
+                Features
+              </Link>
+              <Link
+                href="#search"
+                activeClass="text-cyan-400"
+                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+              >
+                Check Breach
+              </Link>
+              <Link
+                href="#faq"
+                activeClass="text-cyan-400"
+                className="px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors"
+              >
+                FAQ
+              </Link>
+            </div>
           </div>
-        </div>
 
-        {/* Right side controls */}
-        <div className="flex items-center space-x-4">
-          {/* Notification */}
-          <div className="relative">
-            <button
-              onClick={() => setShowSubscribe(!showSubscribe)}
-              className="p-2 rounded-full text-gray-400 hover:text-green-400 hover:bg-gray-800 transition-all relative group"
-            >
-              <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-              <span className="sr-only">Notifications</span>
-            </button>
-
-            {showSubscribe && (
-              <div className="absolute right-0 mt-2 w-72 bg-gray-800 rounded-lg shadow-xl border border-green-400/20 z-50 overflow-hidden">
-                <div className="p-4">
-                  <h3 className="text-sm font-medium text-white mb-2">
-                    {isSubscribed ? "You're subscribed!" : "Get breach alerts"}
-                  </h3>
-                  {isSubscribed ? (
-                    <p className="text-xs text-gray-300">
-                      You'll receive notifications when your data appears in new
-                      breaches.
-                    </p>
-                  ) : (
-                    <form onSubmit={handleSubscribe} className="space-y-3">
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="your@email.com"
-                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-green-500"
-                        required
-                      />
-                      <Button
-                        type="submit"
-                        variant="primary"
-                        className="w-full py-1.5 text-sm bg-gradient-to-r from-green-600 to-green-800 hover:from-green-500 hover:to-green-700"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? "Subscribing..." : "Subscribe"}
-                      </Button>
-                    </form>
-                  )}
+          {/* User Profile or Auth Buttons */}
+          {user ? (
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="relative group">
+                <button className="flex items-center space-x-2">
+                  <div className="h-8 w-8 rounded-full bg-cyan-500 flex items-center justify-center text-white font-medium">
+                    {user.initial}
+                  </div>
+                  <span className="text-white">{user.name}</span>
+                </button>
+                <div className="absolute right-0 w-48 mt-2 origin-top-right bg-gray-800 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <div className="py-1">
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-cyan-400"
+                    >
+                      Your Profile
+                    </Link>
+                    <Link
+                      href="/settings"
+                      className="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-cyan-400"
+                    >
+                      Settings
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700 hover:text-cyan-400"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center space-x-4">
+              <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
+                Log In
+              </Button>
+            </div>
+          )}
 
-          {/* Profile with dropdown */}
-          <div className="relative">
+          {/* Mobile menu button */}
+          <div className="md:hidden">
             <button
-              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-              className="flex items-center space-x-2 group"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none"
             >
-              <div className="h-8 w-8 rounded-full bg-green-900/50 border border-green-400/30 flex items-center justify-center group-hover:bg-green-800/70 transition-colors">
-                {currentUser ? (
-                  <span className="text-green-400 font-medium">
-                    {currentUser.displayName?.charAt(0).toUpperCase() ||
-                      currentUser.email?.charAt(0).toUpperCase() ||
-                      "U"}
-                  </span>
-                ) : (
-                  <User className="h-4 w-4 text-green-400" />
-                )}
-              </div>
+              {isMobileMenuOpen ? (
+                <X className="block h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="block h-6 w-6" aria-hidden="true" />
+              )}
             </button>
-
-            {showProfileDropdown && currentUser && (
-              <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-green-500/20 rounded-md shadow-lg z-50">
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center w-full px-4 py-2 text-sm text-gray-200 hover:bg-gray-700"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
-    </nav>
-  );
-};
 
-const NavItem: React.FC<{
-  icon: React.ReactNode;
-  text: string;
-  onClick: () => void;
-}> = ({ icon, text, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      className="flex items-center space-x-1.5 text-gray-300 hover:text-green-400 group transition-colors"
-    >
-      <span className="group-hover:scale-110 transition-transform">{icon}</span>
-      <span className="text-sm font-medium group-hover:tracking-wide transition-all">
-        {text}
-      </span>
-      <span className="block h-0.5 w-0 group-hover:w-full bg-green-400 transition-all duration-300"></span>
-    </button>
+      {/* Mobile menu */}
+      <div className={md:hidden ${isMobileMenuOpen ? "block" : "hidden"}}>
+        <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-800/95 backdrop-blur-sm">
+          <Link
+            href="/home"
+            activeClass="bg-gray-700 text-cyan-400"
+            className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-cyan-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            href="#features"
+            activeClass="bg-gray-700 text-cyan-400"
+            className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-cyan-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Features
+          </Link>
+          <Link
+            href="#search"
+            activeClass="bg-gray-700 text-cyan-400"
+            className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-cyan-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Check Breach
+          </Link>
+          <Link
+            href="#faq"
+            activeClass="bg-gray-700 text-cyan-400"
+            className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-cyan-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            FAQ
+          </Link>
+
+          {user ? (
+            <>
+              <div className="pt-4 pb-3 border-t border-gray-700">
+                <div className="flex items-center px-5">
+                  <div className="h-10 w-10 rounded-full bg-cyan-500 flex items-center justify-center text-white font-medium">
+                    {user.initial}
+                  </div>
+                  <div className="ml-3">
+                    <div className="text-base font-medium text-white">
+                      {user.name}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3 px-2 space-y-1">
+                  <Link
+                    href="/profile"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                  >
+                    Your Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="pt-4 pb-3 border-t border-gray-700">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-center"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  navigate("/");
+                }}
+              >
+                Log In
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 };
 
