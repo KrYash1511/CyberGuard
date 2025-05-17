@@ -29,43 +29,19 @@ const SearchSection: React.FC = () => {
     setIsSearching(true);
 
     // Simulate API call with timeout
-    setTimeout(() => {
-      const hasBreachTerm =
-        searchTerm.toLowerCase().includes("breach") ||
-        searchTerm.toLowerCase().includes("leak") ||
-        Math.random() > 0.7;
-
-      setIsBreached(hasBreachTerm);
-
-      if (hasBreachTerm) {
-        setBreachDetails({
-          breachCount: Math.floor(Math.random() * 5) + 1,
-          breaches: [
-            {
-              name: "MegaCorp Data Leak",
-              date: "2024-05-11",
-              affectedAccounts: "8.4 million",
-              dataTypes: ["Email", "Password", "Name", "Phone"],
-            },
-            {
-              name: "SocialConnect Breach",
-              date: "2024-02-23",
-              affectedAccounts: "103 million",
-              dataTypes: ["Email", "Password (hashed)", "Username"],
-            },
-          ],
-          riskLevel: "High",
-          riskScore: Math.floor(Math.random() * 40) + 60,
-          firstSeen: "2024-02-15",
-          lastSeen: "2024-05-20",
-          relatedBreaches: ["LinkedIn 2021", "Adobe 2013"],
-          darkWebMentions: Math.floor(Math.random() * 50),
-        });
-      }
-
-      setIsSearching(false);
-      setHasSearched(true);
-    }, 2000);
+    fetch(`http://localhost:5000/api/breach/search?term=${searchTerm}&type=${searchType}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setIsBreached(data.breached);
+        setBreachDetails(data.data || {});
+        setIsSearching(false);
+        setHasSearched(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsSearching(false);
+        setHasSearched(true);
+      });
   };
 
   const handleNotificationSubmit = (e: React.FormEvent) => {
