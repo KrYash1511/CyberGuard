@@ -64,21 +64,21 @@ const Navbar: React.FC = () => {
               <Link
                 href="#features"
                 activeClass="text-green-100"
-                className="px-3 py-2 text-sm font-medium hover:text-green-400 transition-colors"
+                className="px-3 py-2 text-sm text-white font-medium hover:text-green-400 transition-colors"
               >
                 Features
               </Link>
               <Link
                 href="#search"
                 activeClass="text-green-100"
-                className="px-3 py-2 text-sm font-medium hover:text-green-400 transition-colors"
+                className="px-3 py-2 text-sm text-white font-medium hover:text-green-400 transition-colors"
               >
                 Check Breach
               </Link>
               <Link
                 href="#faq"
                 activeClass="text-green-100"
-                className="px-3 py-2 text-sm font-medium hover:text-green-400 transition-colors"
+                className="px-3 py-2 text-sm text-white font-medium hover:text-green-400 transition-colors"
               >
                 FAQ
               </Link>
@@ -120,7 +120,7 @@ const Navbar: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="px-4 py-2 text-green-600 hover:text-red-600 transition-colors">
               <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
                 Log Out
               </Button>
