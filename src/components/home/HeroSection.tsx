@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 const HeroSection: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Animation for the background grid
+  // Animation for the binary rain effect
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -24,35 +24,50 @@ const HeroSection: React.FC = () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // Grid properties
-    const gridSize = 30;
-    const dotSize = 1;
-    let frame = 0;
+    // Binary rain properties
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / (fontSize * window.devicePixelRatio));
+    const drops: number[] = [];
+    
+    // Fill drops with random positions
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.random() * -100;
+    }
+
+    // Characters - mostly 0s and 1s with some other characters for variety
+    const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
 
     // Animation loop
     const animate = () => {
-      frame++;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
       const width = canvas.width / window.devicePixelRatio;
       const height = canvas.height / window.devicePixelRatio;
       
-      // Draw grid points
-      ctx.fillStyle = 'rgba(49, 225, 247, 0.3)';
+      // Semi-transparent black background to create trail effect
+      ctx.fillStyle = 'rgba(43, 156, 43, 0.05)';
+      ctx.fillRect(0, 0, width, height);
       
-      for (let x = 0; x < width; x += gridSize) {
-        for (let y = 0; y < height; y += gridSize) {
-          // Calculate a wave effect
-          const distanceToCenter = Math.sqrt(
-            Math.pow(x - width / 2, 2) + Math.pow(y - height / 2, 2)
-          );
-          
-          const waveOffset = Math.sin(distanceToCenter / 50 - frame / 30) * 3;
-          
-          ctx.beginPath();
-          ctx.arc(x + waveOffset, y + waveOffset, dotSize, 0, Math.PI * 2);
-          ctx.fill();
+      ctx.font = `${fontSize}px monospace`;
+      
+      for (let i = 0; i < drops.length; i++) {
+        // Random character
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        
+        // Different shades of green
+        const greenIntensity = Math.floor(Math.random() * 2000) + 1000;
+        ctx.fillStyle = `rgba(0, ${greenIntensity}, 0, ${Math.random() * 1 + 1})`;
+        
+        // Draw character
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+        ctx.fillText(text, x, y);
+        
+        // Reset drop to top when it reaches bottom
+        if (y > height && Math.random() > 0.975) {
+          drops[i] = 0;
         }
+        
+        // Move drop down
+        drops[i]++;
       }
       
       requestAnimationFrame(animate);
@@ -68,14 +83,14 @@ const HeroSection: React.FC = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Animated background */}
+      {/* Animated binary rain background */}
       <canvas 
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
       />
       
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/80 to-gray-900/95 z-10"></div>
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/90 to-gray-900/95 z-10"></div>
       
       {/* Content */}
       <div className="container px-4 sm:px-6 mx-auto relative z-20 py-12 md:py-24">
@@ -110,7 +125,6 @@ const HeroSection: React.FC = () => {
               Check for Breaches
             </Button>
           </div>
-        
         </div>
       </div>
     </div>
