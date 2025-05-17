@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Breach = require('../models/Breach');
+const Breach = require('../models/breach');
 
 // GET /api/breach/search?term=917278719501&type=keyword
 router.get('/search', async (req, res) => {

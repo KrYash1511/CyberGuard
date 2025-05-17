@@ -1,4 +1,3 @@
-// src/App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import HomePage from "./pages/HomePage";
@@ -7,7 +6,9 @@ import ReportPage from "./pages/ReportPage";
 import Navbar from "./components/layout/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SearchBreach
 
+from "./pages/SearchBreach";
 function App() {
   return (
     <AuthProvider>
@@ -46,6 +47,18 @@ function App() {
                 <>
                   <Navbar />
                   <ReportPage />
+                </>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/search"
+            element={
+              <ProtectedRoute>
+                <>
+                  <Navbar />
+                  <SearchBreach />
                 </>
               </ProtectedRoute>
             }
