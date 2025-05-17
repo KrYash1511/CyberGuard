@@ -144,7 +144,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className={md:hidden ${isMobileMenuOpen ? "block" : "hidden"}}>
+      <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-800/95 backdrop-blur-sm">
           <Link
             href="/home"
